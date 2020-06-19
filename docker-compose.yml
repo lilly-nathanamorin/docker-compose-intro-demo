@@ -29,6 +29,6 @@ services:
     volumes:
       - .:/code
     ports:
-      - "127.0.0.1:8888:8888"
+      - "8888:8888"
     depends_on:
       - db
