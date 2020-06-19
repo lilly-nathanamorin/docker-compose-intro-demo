@@ -1,0 +1,34 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:12.3
+    restart: always
+    container_name: db
+    environment:
+      POSTGRES_PASSWORD: test
+  web:
+    build:
+      context: .
+      args:
+        http_proxy: $http_proxy
+        https_proxy: $https_proxy
+    container_name: web
+    environment:
+      http_proxy: $http_proxy
+      https_proxy: $https_proxy
+      DATABASE_PASSWORD: test
+      DATABASE_USER: postgres
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      LOCAL_ADMIN_USER: admin
+      LOCAL_ADMIN_PASS: admin
+    command: >
+      bash -c "sleep 2 && python manage.py migrate
+      && echo \"from django.contrib.auth.models import User; import os; User.objects.filter(username=os.environ['LOCAL_ADMIN_USER']).exists() or User.objects.create_superuser(os.environ['LOCAL_ADMIN_USER'], '', os.environ['LOCAL_ADMIN_PASS'])\" | python manage.py shell
+      && python manage.py runserver 0.0.0.0:8888"
+    volumes:
+      - .:/code
+    ports:
+      - "127.0.0.1:8888:8888"
+    depends_on:
+      - db
