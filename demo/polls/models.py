@@ -10,6 +10,7 @@ class Poll(models.Model):
         help_text="A longer description of the poll to give more detail than "
                   "just the name."
     )
+    question = models.CharField(max_length=250, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
