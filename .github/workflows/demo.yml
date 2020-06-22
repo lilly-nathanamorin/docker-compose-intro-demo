@@ -19,7 +19,6 @@ jobs:
         docker-compose up -d
         # add a pause for servics to come up before testing
         sleep 5
-    - uses: actions/checkout@v2
     - name: Run tests
       run: |
         docker exec web bash -c "python manage.py test -v 2"
