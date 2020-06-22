@@ -1,0 +1,24 @@
+name: Demo CI
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.8'
+    - name: Start compose stack
+      run: |
+        docker-compose build
+        docker-compose up -d
+        # add a pause for servics to come up before testing
+        sleep 5
+    - uses: actions/checkout@v2
+    - name: Run tests
+      run: |
+        docker exec web bash -c "python manage.py test"
