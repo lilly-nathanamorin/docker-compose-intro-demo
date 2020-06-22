@@ -62,7 +62,7 @@ class TestPollModel(TestCase):
 
     def test_question_field_exists(self):
         """Test question field can be populated."""
-        poll = Polls.objects.create(
+        poll = Poll.objects.create(
             name="test",
             description="test",
             question="What do you want to learn about Docker?"
